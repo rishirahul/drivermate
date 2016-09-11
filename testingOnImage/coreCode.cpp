@@ -40,6 +40,8 @@ int main( int argc, char* argv[])
     cout << I.type() << endl;
     cout << I.depth() << endl;
 
+    // Reduce brigtness of light area 
+    /*
     for (int y = 0; y < nrows; ++y) {
         uchar* ptr = I.ptr<uchar>(y);
         for (int x = 0; x < ncols; ++x) {
@@ -55,7 +57,13 @@ int main( int argc, char* argv[])
             }
         }
     }
+    */
 
+	// divide image in 16 regions
+	// get indices and size of the regions
+	// extract the rectangle
+	// iterate over the region and decide new value and put in the matrix
+	// goto new rectangle and repeat
     int k;
     for (int i=0; i<nrows-1; i = i + subrow) {
         int sub_x_end = (i + subrow - 1) > (nrows-1) ? nrows - 1 : (i + subrow - 1);
@@ -76,22 +84,7 @@ int main( int argc, char* argv[])
         }
     }
 
-	// divide image in 16 regions
-	// get indices and size of the regions
-	// extract the rectangle
-	// iterate over the region and decide new value and put in the matrix
-	// goto new rectangle and repeat
 
-    /*for(int j = 1 ; j < O.rows-1; ++j)
-    {
-        const uchar* current  = I.ptr<uchar>(j    );
-        uchar* output = O.ptr<uchar>(j);
-
-        for(int i= nChannels;i < nChannels*(I.cols-1); ++i)
-        {
-            *output++ = saturate_cast<uchar>(current[i] + 45);
-        }
-    }*/
     balance_white(I);
 	namedWindow("Input", WINDOW_AUTOSIZE);
 	imshow( "Input", I );
@@ -105,7 +98,7 @@ int main( int argc, char* argv[])
     return 0;
 }
 
-void balance_white(cv::Mat mat) 
+void balance_white(cv::Mat mat)
 {
   double discard_ratio = 0.05;
   int hists[3][256];
